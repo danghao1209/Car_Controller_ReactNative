@@ -38,7 +38,6 @@ function JoyStick() {
         autoCenter={true}
         onValue={({ x, y }) => {
             setLocation({x:x, y:y});
-           
         }}>
     </AxisPad> );
 }
