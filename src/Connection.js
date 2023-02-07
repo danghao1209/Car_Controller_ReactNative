@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import WifiManager from "react-native-wifi-reborn";
-import { Text, View, TouchableOpacity, PermissionsAndroid } from 'react-native';
-
-
-
+import { Text, View, TouchableOpacity, PermissionsAndroid, Alert, ToastAndroid } from 'react-native';
 
 function Connection() {
     const host = "ws:\/\/192.168.4.1/ws";
@@ -11,65 +8,46 @@ function Connection() {
     const [wifi, setWifi] = useState('');
     const [sockets, setSocket] = useState()
     const [color,  setColor] = useState('#696969')
-    useEffect(() =>{
-        async function ax(){
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Allow to use Wifi',
-              message:
-                'Ứng dụng này cần quyền vị trí vì điều này là cần thiết  ' +
-                'để quét các mạng wifi.',
-              buttonNegative: 'Cho Phép',
-              buttonPositive: 'Từ Chối',
-            },
-          );
-
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            try {
-              const b = await WifiManager.getCurrentWifiSSID()
-              setWifi(b)
-              if(wifi == 'Carr'){
-                //thong bao
-                const ws = new WebSocket(host)
-                setSocket(ws)
-                setIsConnectSoc(true)
-                setColor('green')
-              }
-              else{
-                const a = await WifiManager.connectToProtectedSSID('Carr','12345678@',true)
-                console.log(a)
-
-                if(a == 'connected'){
-                  const ws = new WebSocket(host)
-                  setWifi('Carr')
-                  setSocket(ws)
-                  setIsConnectSoc(true)
-                  setColor('green')
-                }
-                else{
-                  //tbao
-                  setIsConnectSoc(false)
-                  setColor('#696969')
-                }
-              }
-            } 
-            catch (error) {
-              console.log(error)
-            }
-          } 
-          else {
-            // Permission denied
-            //thognbao
-          }
-        }
-        ax()
+    const showAlert = (alert) =>
+      Alert.alert(
+        'Error',
+        alert,
+        [
+          {
+            text: 'Close',
+            onPress: () => handleConnect(),
+            style: 'cancel',
+          },
+        ],
         
-        return(
-          closeSocket
-          )
-    },[]);
+      );
+      const showToast = (mess) => {
+        ToastAndroid.show(mess, ToastAndroid.SHORT);
+      };
     
+    
+    const handleConnect = async () =>{
+      try {
+        const a = await WifiManager.connectToProtectedSSID('Carr','12345678@',true)
+            if(a == 'connected'){
+              const ws = new WebSocket(host)
+              setWifi('Carr')
+              setSocket(ws)
+              setIsConnectSoc(true)
+              setColor('lime')
+              showToast('Connect success')
+            }
+            else{
+              //tbao
+              showToast('Connect fail!')
+              setIsConnectSoc(false)
+              setColor('#696969')
+            }
+      }catch{
+
+      }
+    }
+
     const closeSocket = () =>{
       try{
         if(isConnectSoc){
@@ -77,6 +55,7 @@ function Connection() {
           setSocket()
           setIsConnectSoc(false)
           setColor('#696969')
+          showToast('Disconnected!')
         }
       }catch(err){
         console.log(err)
@@ -94,8 +73,8 @@ function Connection() {
        
     };
     const onConnect = () =>{
-      try{
-        async function connect(){
+      async function connect(){
+        try{
           const b = await WifiManager.getCurrentWifiSSID()
           setWifi(b)
           if(wifi == 'Carr'){
@@ -103,56 +82,81 @@ function Connection() {
               const ws = new WebSocket(host)
               setSocket(ws)
               setIsConnectSoc(true)
-              setColor('green')
+              setColor('lime')
+              showToast('Connect success')
             }
             else{
               //tb da ket noi
+              showToast('Connected!')
             }
           }
           else{
-            const a = await WifiManager.connectToProtectedSSID('Carr','12345678@',true)
-            if(a == 'connected'){
-              const ws = new WebSocket(host)
-              setWifi('Carr')
-              setSocket(ws)
-              setIsConnectSoc(true)
-              setColor('green')
-            }
-            else{
-              //tbao
-              setIsConnectSoc(false)
-              setColor('#696969')
-            }
-          
+            handleConnect()
+          }
+        }catch(err){
+          console.log(err)
+          showAlert('Please Turn On The Car')
         }
-        }
-        connect()
       }
-      catch(err){
-
-      }
+      connect()
     }
-    // const onConnect = ()=>{
-        
-    //     if(isConnectWf != 'Carr'){
-    //       WifiManager.connectToProtectedSSID('Carr','12345678@',false)
-    //       .then(()=>{
-    //         setIsConnectWf('Carr')
-    //         console.log('success')
-    //       })
-    //       .catch(()=>{
-    //         console.log('error')
-    //       })
-    //     }
-    //     if(isConnectSoc){
-    //       setSocket(new WebSocket(host))
-    //     }
-        
-    // }
+    
     module.exports.handleSend = handleSend
     module.exports.closeSocket = closeSocket
+
+
+
+    useEffect(() =>{
+      async function ax(){
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: 'Allow to use Wifi',
+              message:
+                'Ứng dụng này cần quyền vị trí vì điều này là cần thiết  ' +
+                'để quét các mạng wifi.',
+              buttonNegative: 'Cho Phép',
+              buttonPositive: 'Từ Chối',
+            },
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            try {
+              const b = await WifiManager.getCurrentWifiSSID()
+              setWifi(b)
+              if(wifi == 'Carr'){
+                //thong bao
+                const ws = new WebSocket(host)
+                setSocket(ws)
+                setIsConnectSoc(true)
+                setColor('lime')
+                showToast('Connect success')
+              }
+              else{
+                handleConnect()
+              }
+            } 
+            catch (error) {
+              showToast('Connect fail!')
+            }
+          } 
+          else {
+            showAlert('Permission denied')
+            // Permission denied
+            //thognbao
+          }
+        }
+        catch(err){
+          
+        }
+      }
+      ax()
+      
+    },[]);
+
+
     return ( <View style={{ justifyContent: 'center',alignItems: 'center'}} >
-        <View style={{width:10 , height: 10, borderRadius:1000, backgroundColor: color, marginBottom: 10}}></View>
+        <View style={{width:12 , height: 12, borderRadius:1000, backgroundColor: color, marginBottom: 12}}></View>
         <TouchableOpacity
           style={{backgroundColor: '#F18805',padding:10, borderRadius:10,marginBottom:10, padding:10 }}
           onPress={onConnect}

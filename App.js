@@ -9,10 +9,6 @@ import topAr from './assets/toparrow.png'
 import JoyStick from './src/JoyStick';
 import Connection, {handleSend} from './src/Connection';
 
-
-
-
-
 function App() {
 
   useEffect(() => {
@@ -27,7 +23,7 @@ function App() {
           </View>
           <View style={{flex:1, justifyContent: 'center', marginBottom:100, alignItems: 'center',marginLeft:40}}>
             <Connection/>
-            <Text style={{ marginTop:20, fontSize:20, textAlign:'center'}}>Nhóm 54</Text>
+            <Text style={{ marginTop:20, fontSize:24, textAlign:'center', color:'mistyrose'}}>Nhóm 54</Text>
           </View>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <TouchableOpacity

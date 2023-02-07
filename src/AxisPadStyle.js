@@ -7,7 +7,7 @@ export default StyleSheet.create({
         borderRadius: 300,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000033',
+        backgroundColor: 'dimgray',
     },
     handler: {
         width: "60%",
@@ -15,6 +15,6 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 300,
-        backgroundColor: '#00000066'
+        backgroundColor: 'wheat'
     }
 });
