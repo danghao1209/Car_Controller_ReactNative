@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState  } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
 
@@ -10,12 +10,72 @@ import JoyStick from './src/JoyStick';
 import Connection, {handleSend} from './src/Connection';
 
 function App() {
+  const [isFoward,  setISFoward] = useState(false)
+  const [isBack, setISBack] = useState(false)
+  const [isLeft, setISLeft] = useState(false)
+  const [isRight, setISRight] = useState(false)
 
   useEffect(() => {
     SplashScreen.hide()
   },[])
 
-    return ( 
+  useEffect(() => {
+    let intervalId;
+    if (isFoward) {
+      intervalId = setInterval(() => {
+        handleSend("3")
+        console.log('tiến 1')
+      }, 50);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isFoward]);
+
+  useEffect(() => {
+    let intervalId;
+    if (isBack) {
+      intervalId = setInterval(() => {
+        handleSend("4")
+        console.log('Lui')
+      }, 50);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isBack]);
+
+  useEffect(() => {
+    let intervalId;
+    if (isLeft) {
+      intervalId = setInterval(() => {
+        handleSend("1")
+        console.log('reTrai')
+      }, 50);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isLeft]);
+
+
+  useEffect(() => {
+    let intervalId;
+    if (isRight) {
+      intervalId = setInterval(() => {
+        handleSend("2")
+        console.log('rePhai')
+      }, 10);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isRight]);
+
+
+
+
+  return ( 
     <View style={styles.container }>
       <View style={styles.gameContainer }>
           <View style={{marginLeft:20}}>
@@ -28,27 +88,50 @@ function App() {
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <TouchableOpacity
               title="Tiến"
-              onPress={()=>{handleSend("3")}}
+              //onPressIn={()=>{handleSend("3")}}
+              onPressIn={()=>{setISFoward(true)}}
+              onPressOut={()=>{
+                setISFoward(false)
+                handleSend("0")
+              }}
             >
               <Image source={topAr} style={{width:50, height:50, tintColor:'#fff'}}/>
             </TouchableOpacity>
+
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity
                 title="Rẽ Phải"
-                onPress={()=>{handleSend("2")}}
+                //onPressIn={()=>{handleSend("2")}}
+                onPressIn={()=>{setISRight(true)}}
+                onPressOut={()=>{
+                  setISRight(false)
+                  handleSend("0")
+                }}
               >
                 <Image source={leftAr} style={{width:50, height:50, margin:30, marginRight:70, tintColor:'#fff'}}/>
               </TouchableOpacity>
+
               <TouchableOpacity
                 title="Rẽ Trái"
-                onPress={()=>{handleSend("1")}}
+                //onPressIn={()=>{handleSend("1")}}
+                onPressIn={()=>{setISLeft(true)}}
+                onPressOut={()=>{
+                  setISLeft(false)
+                  handleSend("0")
+                }}
               >
                 <Image source={rightAr} style={{width:50, height:50, margin:30, tintColor:'#fff'}}/>
               </TouchableOpacity>
             </View>
+
             <TouchableOpacity
               title="Lùi"
-              onPress={()=>{handleSend("4")}}
+              //onPressIn={()=>{handleSend("4")}}
+              onPressIn={()=>{setISBack(true)}}
+              onPressOut={()=>{
+                setISBack(false)
+                handleSend("0")
+              }}
             >
               <Image source={bottomAr} style={{width:50, height:50, tintColor:'#fff'}}/>
             </TouchableOpacity>

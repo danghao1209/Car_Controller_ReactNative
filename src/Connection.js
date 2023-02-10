@@ -66,7 +66,6 @@ function Connection() {
     
       try {
         sockets.send(data);
-        sockets.send('0');
       } catch (error) {
         
       }
