@@ -79,10 +79,11 @@ function JoyStick() {
             setISBack(true) //lui
         }
         else if(location.x > 0.7071 && location.x <= 1 && location.y > -0.7071 && location.y< 0.7071){
-            setISRight(true) //rephai
+            setISLeft(true) //retrai
         }
         else if(location.x < -0.7071 && location.x >= -1 && location.y < 0.7071 && location.y> -0.7071){
-            setISLeft(true) //retrai
+            setISRight(true) //rephai
+
         }
         else{
             console.log(location.x, location.y)

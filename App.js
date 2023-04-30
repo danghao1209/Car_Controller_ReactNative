@@ -108,7 +108,7 @@ function App() {
                   handleSend("0")
                 }}
               >
-                <Image source={leftAr} style={{width:50, height:50, margin:30, marginRight:70, tintColor:'#fff'}}/>
+                <Image source={leftAr} style={{width:50, height:50, margin:50, marginRight:75, tintColor:'#fff'}}/>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -120,7 +120,7 @@ function App() {
                   handleSend("0")
                 }}
               >
-                <Image source={rightAr} style={{width:50, height:50, margin:30, tintColor:'#fff'}}/>
+                <Image source={rightAr} style={{width:50, height:50, margin:50, tintColor:'#fff'}}/>
               </TouchableOpacity>
             </View>
 
